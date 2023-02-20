@@ -1,31 +1,33 @@
 import { Request, Response, NextFunction } from "express";
 import { QueryConfig, QueryResult } from "pg";
 import { client } from "../database";
-import { UserResponse } from "../interfaces/users.interface";
 import { AppError } from "../errors";
+import { UserResponse } from "../interfaces/users.interfaces";
 
-const ensureEmailNotExists = async (req: Request, res: Response, next: NextFunction): Promise<Response | void> => {
+const ensureUserExistsMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+  const userId: number = parseInt(req.params.id);
+
   const queryString: string = `
-    SELECT 
+    SELECT
       *
     FROM
       users
     WHERE
-      email = $1
+      id = $1;
   `;
 
   const queryConfig: QueryConfig = {
     text: queryString,
-    values: [req.body.email],
+    values: [userId],
   };
 
   const queryResult: QueryResult<UserResponse> = await client.query(queryConfig);
 
-  if (queryResult.rowCount > 0) {
-    throw new AppError("E-mail already registered", 409);
+  if (queryResult.rowCount === 0) {
+    throw new AppError("User not found");
   }
 
   next();
 };
 
-export default ensureEmailNotExists;
+export default ensureUserExistsMiddleware;

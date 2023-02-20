@@ -8,11 +8,26 @@ const createUserSchema = z.object({
     return hashSync(pass, 10);
   }),
   admin: z.boolean().optional(),
-  active: z.boolean(),
+});
+
+const editUserSchema = z.object({
+  name: z.string().max(20).optional(),
+  email: z.string().email().max(100).optional(),
+  password: z
+    .string()
+    .transform((pass) => {
+      return hashSync(pass, 10);
+    })
+    .optional(),
 });
 
 const userResponseSchema = createUserSchema.extend({
+  active: z.boolean(),
   id: z.number(),
 });
 
-export { createUserSchema, userResponseSchema };
+const userResponseWithoutPassword = userResponseSchema.omit({
+  password: true,
+});
+
+export { createUserSchema, userResponseSchema, userResponseWithoutPassword, editUserSchema };
