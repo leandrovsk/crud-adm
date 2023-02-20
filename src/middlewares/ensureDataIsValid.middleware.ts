@@ -4,7 +4,7 @@ import { AppError } from "../errors";
 
 const ensureDataIsValid = (schema: ZodSchema) => (req: Request, res: Response, next: NextFunction) => {
   const requestKeys = Object.keys(req.body);
-  const requiredKeys = ["name", "email", "password", "admin"];
+  const requiredKeys = ["name", "email", "password"];
 
   const validatedKeys = requestKeys.some((key) => requiredKeys.includes(key));
 

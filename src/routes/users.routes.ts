@@ -12,7 +12,7 @@ const userRoutes: Router = Router();
 userRoutes.post("", ensureDataIsValid(createUserSchema), createUsersController);
 userRoutes.get("", ensureTokenIsValid, ensureUserIsAdmMiddleware, listAllUsersController);
 userRoutes.get("/profile", ensureTokenIsValid, listUsersController);
-userRoutes.patch("/:id", ensureUserExistsMiddleware, ensureDataIsValid(editUserSchema), ensureTokenIsValid, ensureUserProperty, editUsersController);
+userRoutes.patch("/:id", ensureUserExistsMiddleware, ensureTokenIsValid, ensureDataIsValid(editUserSchema), ensureUserProperty, editUsersController);
 userRoutes.delete("/:id", ensureUserExistsMiddleware, ensureTokenIsValid, ensureUserProperty, deleteUsersController);
 userRoutes.put("/:id/recover", ensureUserExistsMiddleware, ensureTokenIsValid, ensureUserIsAdmMiddleware, recoverUsersController);
 
